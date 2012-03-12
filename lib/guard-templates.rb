@@ -4,7 +4,9 @@ require "guard/guard"
 module Guard
   class Templates < Guard
 
-    DEFAULTS = { }
+    DEFAULTS = { 
+      :namespace => 'this'
+    }
 
     # Initialize a Guard.
     # @param [Array<Guard::Watcher>] watchers the Guard file watchers
@@ -48,7 +50,7 @@ module Guard
             contents = File.read(path)
             target = File.join(options[:output], "#{subpath}.js")
             File.open(target, 'w') do |f|
-              f.write("window['#{subpath}'] = \'#{contents.dump}\';")
+              f.write("#{@options[:namespace]}['#{subpath}'] = #{contents.dump};")
             end
           end
         end
