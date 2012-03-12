@@ -14,6 +14,7 @@ module Guard
     def initialize(watchers = [], options = {})
       @watchers = watchers
       @options = DEFAULTS.clone.merge(options)
+      @single_file_mode = @options[:output].match(/\.js$/)
       super(watchers, @options)
     end
 
@@ -43,16 +44,27 @@ module Guard
     # @param [Array<String>] paths the changes files or paths
     # @raise [:task_has_failed] when run_on_change has failed
     def run_on_change(paths)
+      templates = {}
       paths.each do |path|
         @watchers.each do |watcher|
           if match = path.match(watcher.pattern)
             subpath = match[1]
             contents = File.read(path)
-            target = File.join(options[:output], "#{subpath}.js")
-            File.open(target, 'w') do |f|
-              f.write("#{@options[:namespace]}['#{subpath}'] = #{contents.dump};")
+            target = File.join(@options[:output], "#{subpath}.js")
+            if @single_file_mode
+              templates[subpath] = contents
+            else
+              File.open(target, 'w') do |f|
+                f.write("#{@options[:namespace]}['#{subpath}'] = #{contents.dump}")
+              end
             end
           end
+        end
+      end
+      if @single_file_mode
+        File.open(@options[:output], 'w') do |f|
+          js = templates.map{|k,v| "#{k.dump}: #{v.dump}"}.join(",\n")
+          f.write "#{@options[:namespace]}.templates = {#{js}}"
         end
       end
     end

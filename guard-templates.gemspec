@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency "guard"
   s.add_runtime_dependency "execjs"
+  s.add_runtime_dependency "json"
   s.add_development_dependency "bundler"
   s.add_development_dependency "rspec"
   s.add_development_dependency "fakefs"
