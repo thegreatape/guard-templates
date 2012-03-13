@@ -1,7 +1,4 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
-require 'guard/guard-templates/version'
-
 Gem::Specification.new do |s|
   s.name        = "guard-templates"
   s.version     = "0.0.1"
