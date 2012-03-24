@@ -1,5 +1,6 @@
 require "guard"
 require "guard/guard"
+require 'guard/compilers'
 
 module Guard
   class Templates < Guard
@@ -49,13 +50,14 @@ module Guard
         @watchers.each do |watcher|
           if match = path.match(watcher.pattern)
             subpath = match[1]
+            type = File.extname(path).gsub(/^\./,'')
             contents = File.read(path)
             target = File.join(@options[:output], "#{subpath}.js")
             if @single_file_mode
               templates[subpath] = contents
             else
               File.open(target, 'w') do |f|
-                f.write("#{@options[:namespace]}['#{subpath}'] = #{contents.dump}")
+                f.write("#{@options[:namespace]}['#{subpath}'] = #{compile(contents, type)}")
               end
             end
           end
@@ -73,6 +75,15 @@ module Guard
     # @param [Array<String>] paths the deleted files or paths
     # @raise [:task_has_failed] when run_on_change has failed
     def run_on_deletion(paths)
+    end
+
+    private
+    def compile(str, type)
+      if Compilers.methods.include?("compile_#{type}")
+        Compilers.send("compile_#{type}", str)
+      else
+        str.dump
+      end
     end
     
   end
