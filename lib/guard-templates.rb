@@ -39,6 +39,7 @@ module Guard
     # This method should be principally used for long action like running all specs/tests/...
     # @raise [:task_has_failed] when run_all has failed
     def run_all
+      run_on_change(Watcher.match_files(self, Dir.glob('**/*')))
     end
 
     # Called on file(s) modifications that the Guard watches.
@@ -54,6 +55,8 @@ module Guard
             if @single_file_mode
               templates[target[:name]] = contents
             else
+              dir = Pathname.new(target[:path]).dirname.to_s
+              FileUtils.mkdir_p(dir) if !File.exist?(dir)
               File.open(target[:path], 'w') do |f|
                 f.write("#{@options[:namespace]}['#{target[:name]}'] = #{compile(contents, type)}") 
               end
@@ -73,19 +76,19 @@ module Guard
     # @param [Array<String>] paths the deleted files or paths
     # @raise [:task_has_failed] when run_on_change has failed
     def run_on_deletion(paths)
-      for_deletion = []
+      matched = false
       paths.each do |path|
         @watchers.each do |watcher|
           if target = get_target(path, watcher) 
-            if @single_file_mode 
-              for_deletion.push target[:name]
-            else
-              FileUtils.rm target[:path]
-            end
+            matched = true
+            FileUtils.rm target[:path] unless @single_file_mode 
           end
         end
       end
-      #for_deletion.map {|p| FileUtils.rm p } if @single_file_mode
+
+      # this is slow, but works. would be better to do a eval + series of deletes, 
+      # but how to re-serialize the js object?
+      run_all if @single_file_mode && matched
     end
 
     private

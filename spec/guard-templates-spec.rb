@@ -146,11 +146,38 @@ describe Guard::Templates do
     end
 
     it "should delete entries in single file mode" do
+      src_path = 'javascripts/templates/home.handlebars'
+      File.open(src_path, 'w') {|f| f.write("<div>{foo}</div>")}
+      File.open('javascripts/templates/foo.handlebars', 'w') {|f| f.write('foo')}
+
+      dst_path = 'public/templates.js'
+      File.open(dst_path, 'w') {|f| f.write("this['templates'] = {home: 'home', foo: 'bar'}")}
+      @guard_templates = Guard::Templates.new([Guard::Watcher.new(/javascripts\/templates\/(.*)\.handlebars/)],
+                                              :output => 'public/templates.js')
+      eval_js(File.read(dst_path)).keys.should =~ ['home', 'foo']
+
+      FileUtils.rm(src_path)
+      @guard_templates.run_on_deletion([src_path])
+      templates = eval_js(File.read(dst_path))
+      templates.keys.should == ['foo']
     end
   end
 
   describe '#run_all' do 
     it "should compile everything" do
+      paths = ['foo', 'bar/baz', 'duck/duck/go']
+      paths.each do |p| 
+        target = "javascripts/templates/#{p}.handlebars"
+        FileUtils.mkdir_p Pathname.new(target).dirname.to_s
+        File.open(target, 'w') {|f| f.write(p)}
+      end
+      @guard_templates = Guard::Templates.new([Guard::Watcher.new(/javascripts\/templates\/(.*)\.handlebars/)],
+                                              :output => 'public/templates/')
+
+      @guard_templates.run_all
+      paths.each do |p| 
+        File.exists?("public/templates/#{p}.js").should == true
+      end
     end
   end
 end
