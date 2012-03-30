@@ -119,6 +119,33 @@ describe Guard::Templates do
 
   describe "#run_on_deletion" do
     it "should delete output files with source files are deleted" do
+      src_path = 'javascripts/templates/home.handlebars'
+      dst_path = 'public/templates/home.js'
+      File.open(src_path, 'w') {|f| f.write('<div>{foo}</div>')}
+      File.open(dst_path, 'w') {|f| f.write('var home = "<div>{foo}</div>"')}
+      @guard_templates = Guard::Templates.new([Guard::Watcher.new(/javascripts\/templates\/(.*)\.handlebars/)],
+                                              :output => 'public/templates')
+      FileUtils.rm(src_path)
+      @guard_templates.run_on_deletion(src_path)
+      File.exists?(dst_path).should == false
+    end
+
+    it "should delete multiple files correctly" do
+      srcs = ['foo', 'bar', 'goats']
+      srcs.each do |s| 
+        File.open("javascripts/templates/#{s}.handlebars", 'w') {|f| f.write('<div>{foo}</div>')}
+        File.open("public/templates/#{s}.js", 'w') {|f| f.write("this['#{s}'] = '<div>{foo}</div>'")}
+      end
+      File.open("javascripts/templates/dont_delete_me_bro.handlebars", 'w') {|f| f.write('<div>{foo}</div>')}
+      @guard_templates = Guard::Templates.new([Guard::Watcher.new(/javascripts\/templates\/(.*)\.handlebars/)],
+                                              :output => 'public/templates')
+
+      srcs.each{|s| FileUtils.rm "javascripts/templates/#{s}.handlebars"}
+      @guard_templates.run_on_deletion(srcs.map{|s| "javascripts/templates/#{s}.handlebars"})
+      srcs.each{|s| File.exists?("public/templates/#{s}.js").should == false}
+    end
+
+    it "should delete entries in single file mode" do
     end
   end
 

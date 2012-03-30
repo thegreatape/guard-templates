@@ -48,16 +48,14 @@ module Guard
       templates = {}
       paths.each do |path|
         @watchers.each do |watcher|
-          if match = path.match(watcher.pattern)
-            subpath = match[1]
+          if target = get_target(path, watcher)
             type = File.extname(path).gsub(/^\./,'')
             contents = File.read(path)
-            target = File.join(@options[:output], "#{subpath}.js")
             if @single_file_mode
-              templates[subpath] = contents
+              templates[target[:name]] = contents
             else
-              File.open(target, 'w') do |f|
-                f.write("#{@options[:namespace]}['#{subpath}'] = #{compile(contents, type)}")
+              File.open(target[:path], 'w') do |f|
+                f.write("#{@options[:namespace]}['#{target[:name]}'] = #{compile(contents, type)}") 
               end
             end
           end
@@ -75,9 +73,30 @@ module Guard
     # @param [Array<String>] paths the deleted files or paths
     # @raise [:task_has_failed] when run_on_change has failed
     def run_on_deletion(paths)
+      for_deletion = []
+      paths.each do |path|
+        @watchers.each do |watcher|
+          if target = get_target(path, watcher) 
+            if @single_file_mode 
+              for_deletion.push target[:name]
+            else
+              FileUtils.rm target[:path]
+            end
+          end
+        end
+      end
+      #for_deletion.map {|p| FileUtils.rm p } if @single_file_mode
     end
 
     private
+    def get_target(path, watcher)
+      if match = path.match(watcher.pattern)
+        subpath = match[1]
+        {:name => subpath, 
+         :path => File.join(@options[:output], "#{subpath}.js")} 
+      end
+    end
+
     def compile(str, type)
       if Compilers.methods.include?("compile_#{type}")
         Compilers.send("compile_#{type}", str)
