@@ -50,15 +50,14 @@ module Guard
       paths.each do |path|
         @watchers.each do |watcher|
           if target = get_target(path, watcher)
-            type = File.extname(path).gsub(/^\./,'')
             contents = File.read(path)
             if @single_file_mode
-              templates[target[:name]] = contents
+              templates[target] = contents
             else
               dir = Pathname.new(target[:path]).dirname.to_s
               FileUtils.mkdir_p(dir) if !File.exist?(dir)
               File.open(target[:path], 'w') do |f|
-                f.write("#{@options[:namespace]}['#{target[:name]}'] = #{compile(contents, type)}") 
+                f.write("#{@options[:namespace]}['#{target[:name]}'] = #{compile(contents, target[:type])}") 
               end
             end
           end
@@ -66,7 +65,7 @@ module Guard
       end
       if @single_file_mode
         File.open(@options[:output], 'w') do |f|
-          js = templates.map{|k,v| "#{k.dump}: #{v.dump}"}.join(",\n")
+          js = templates.map{|target,content| "#{target[:name].dump}: #{compile(content, target[:type])}" }.join(",\n")
           f.write "#{@options[:namespace]}.templates = {#{js}}"
         end
       end
@@ -95,8 +94,11 @@ module Guard
     def get_target(path, watcher)
       if match = path.match(watcher.pattern)
         subpath = match[1]
+        jspath = File.join(@options[:output], "#{subpath}.js")
+
         {:name => subpath, 
-         :path => File.join(@options[:output], "#{subpath}.js")} 
+         :type => File.extname(path).gsub(/^\./,''),
+         :path => jspath} 
       end
     end
 

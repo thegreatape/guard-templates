@@ -3,7 +3,7 @@ require "bundler/setup"
 require 'execjs'
 require 'fakefs/safe'
 
-require 'guard-templates'
+require 'guard/templates'
 require 'guard/watcher'
 
 # ExecJS needs real filesystem access to find the js engine
@@ -113,6 +113,25 @@ describe Guard::Templates do
                   #{jade}
                   #{compiled} }
       fn = "app['jade-test']()"
+      eval_js(fn, context).should == '<div class="greetings">O HAI</div>'
+    end
+
+    it "should compile jade to native functions in single-file mode" do
+      jade_template = 'javascripts/templates/jade-test.jade'
+      jade_content = '.greetings O HAI'
+      File.open(jade_template, 'w') {|f| f.write(jade_content)}
+      @guard_templates = Guard::Templates.new([Guard::Watcher.new(/javascripts\/templates\/(.*)\.jade/)],
+                                              :namespace => 'app',
+                                              :output => 'public/templates/all.js')
+      @guard_templates.run_on_change [jade_template]
+      File.exists?('public/templates/all.js').should == true
+      File.exists?('public/templates/jade-test.js').should == false
+      compiled = File.read('public/templates/all.js')
+      jade = File.read('lib/engines/jade-runtime.js')
+      context = %{var window = {}, app = {};
+                  #{jade}
+                  #{compiled} }
+      fn = "app.templates['jade-test']()"
       eval_js(fn, context).should == '<div class="greetings">O HAI</div>'
     end
   end
