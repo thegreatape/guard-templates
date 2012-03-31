@@ -22,6 +22,7 @@ module Guard
     # Call once when Guard starts. Please override initialize method to init stuff.
     # @raise [:task_has_failed] when start has failed
     def start
+      run_all
     end
 
     # Called when `stop|quit|exit|s|q|e + enter` is pressed (when Guard quits).
