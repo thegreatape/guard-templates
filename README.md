@@ -25,6 +25,7 @@ guard init templates
 ```
 
 This will look something like:
+
 ```ruby
 guard 'templates', :output => 'public/javascript/templates.js', :namespace => 'MyApp' do
   watch(/app\/javascripts\/templates\/(.*)\.jade$/)
@@ -44,6 +45,7 @@ guard&
 Presently, aside from Jade, this means all of them. :-) See adding new languages below if you'd like support precompilation for your favorite Javascript templating language.
 
 With a templates directory that looks like:
+
 ```
 templates/
 ├── foo
@@ -52,6 +54,7 @@ templates/
 ```
 
 Then ```:output => 'public/javascripts``` will produce a public/javascripts that looks like:
+
 ```
 public/
 └── javascripts
@@ -59,17 +62,23 @@ public/
     │   └── bar.js
     └── index.js
 ```
+
 Each file contains the stringified template contents of the handlebars file:
+
 ```javascript
 MyApp['index'] = "<div>{{index}}</div>\n"
 ```
+
 If output is a path ending in .js, the templates will be compiled to an object in that file. Using the example above with ```:output => 'public/javascripts/templates.js'```, we get a single file result:
+
 ```
 public/
 └── javascripts
     └── templates.js
 ```
+
 that looks like:
+
 ```javascript
 MyApp.templates = {
   "index": "<div>{{index}}</div>\n",
@@ -81,6 +90,7 @@ MyApp.templates = {
 Templates with a .jade extension will be precompiled with Jade's compiler and turned into anonymous functions. The only difference between precompiled and unprecompiled templates is the precompiled ones get turned into functions rather than strings in the resulting Javascript.
 
 With this filesystem structure, and a watch pattern like ```watch(/templates\/(.*)\.jade$/)```
+
 ```
 templates/
 ├── foo
@@ -89,6 +99,7 @@ templates/
 ```
 
 ```:output => 'public/javascripts/templates.js'``` will produce a templates.js that looks like:
+
 ```javascript
 MyApp.templates = {
   "foo/other": function anonymous(locals, attrs, escape, rethrow) {
@@ -101,11 +112,13 @@ MyApp.templates = {
 ```
 
 You can then include templates.js in your application and render the templates by calling the functions in question. I.e:
+
 ```javascript
-MyApp.templates['foo/other]()
+MyApp.templates['foo/other']()
 ```
 
 With ```:output => 'public/javascripts'```, each .jade file will be compiled to an individual .js file, like so:
+
 ```
 ├── public
 │   └── javascripts
@@ -116,9 +129,10 @@ With ```:output => 'public/javascripts'```, each .jade file will be compiled to 
 │   ├── foo
 │   │   └── other.jade
 │   └── index.jade
-````
+```
 
 With the contents of each compiled js file looking like:
+
 ```javascript
 MyApp['index'] = function anonymous(locals, attrs, escape, rethrow) {
   //function contents
