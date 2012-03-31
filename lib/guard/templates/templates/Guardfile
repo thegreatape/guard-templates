@@ -7,5 +7,5 @@
 # see https://github.com/thegreatape/guard-templates for more options
 guard 'templates', :output => 'public/javascript/templates.js', :namespace => 'MyApp' do
   # change this regex to match your source files
-  watch(/app\/javascripts\/templates\/(.*)\.jade/)
+  watch(/app\/javascripts\/templates\/(.*)\.jade$/)
 end
