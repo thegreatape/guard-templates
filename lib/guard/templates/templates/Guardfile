@@ -1,0 +1,11 @@
+# Example guardfile for guard-templates
+#
+# by default, output to a single .js file in public/javascript/templates.js
+# if you'd like to compile each template to an individual .js file,
+# change :output to a directory path instead
+#
+# see https://github.com/thegreatape/guard-templates for more options
+guard 'templates', :output => 'public/javascript/templates.js', :namespace => 'MyApp' do
+  # change this regex to match your source files
+  watch(/app\/javascripts\/templates\/(.*)\.jade/)
+end
