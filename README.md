@@ -12,7 +12,8 @@ end
 ```
 
 Alternatively, install it system-wide with 
-```bash
+
+```
 gem install guard-templates
 ```
 
@@ -20,7 +21,8 @@ Guard::Templates uses [ExecJS](https://github.com/sstephenson/execjs) for interm
 
 ## Usage
 Once guard-templates is installed you can add a sample Guardfile with:
-```bash
+
+```
 guard init templates
 ```
 
@@ -32,7 +34,9 @@ guard 'templates', :output => 'public/javascript/templates.js', :namespace => 'M
 end
 ```
 
-Change the watch and output paths to match your application, and run ```bash
+Change the watch and output paths to match your application, and run 
+
+```
 guard&
 ```
 
@@ -143,5 +147,5 @@ MyApp['index'] = function anonymous(locals, attrs, escape, rethrow) {
 Currently, only [Jade](https://github.com/visionmedia/jade) is supported. All other template types fall back to being inlined as string literals.
 
 ### Adding Precompilation Support For Other Languages
-TODO
+Adding precompilation support for your favorite language is as simple as adding a single class method to Guard::Templates::Compilers. When checking for precompilation support for a particular file extension, guard-templates looks for a class method named ```compile_<extension>`` in that module. It should accept a string (representing the template source) and return a stringified Javascript function. See ```compile_jade``` in Guard::Templates::Compilers for an example.
 

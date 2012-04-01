@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Thomas Mayfield"]
   s.email       = ["Thomas.Mayfield@gmail.com"]
   s.homepage    = ""
-  s.summary     = "Guard plugin for smart, automatic compilation of your Javascript templates"
-  s.description = "Guard plugin for smart, automatic compilation of your Javascript templates"
+  s.summary     = "Javascript template compilation via Guard"
+  s.description = "Guard plugin for smart, automatic compilation of your Javascript template files into usable Javascript"
 
   s.rubyforge_project = "guard-templates"
 
