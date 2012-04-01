@@ -147,5 +147,6 @@ MyApp['index'] = function anonymous(locals, attrs, escape, rethrow) {
 Currently, only [Jade](https://github.com/visionmedia/jade) is supported. All other template types fall back to being inlined as string literals.
 
 ### Adding Precompilation Support For Other Languages
-Adding precompilation support for your favorite language is as simple as adding a single class method to Guard::Templates::Compilers. When checking for precompilation support for a particular file extension, guard-templates looks for a class method named ```compile_<extension>`` in that module. It should accept a string (representing the template source) and return a stringified Javascript function. See ```compile_jade``` in Guard::Templates::Compilers for an example.
+Adding precompilation support for your favorite language is as simple as adding a single class method to Guard::Templates::Compilers. When checking for precompilation support for a particular file extension, guard-templates looks for a class method named ```compile_<extension>``` in that module. It should accept a string (representing the template source) and return a stringified Javascript function. See ```compile_jade``` in Guard::Templates::Compilers for an example.
+
 
