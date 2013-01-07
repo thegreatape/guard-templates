@@ -152,18 +152,21 @@ Here are some available extensions :
   <thead>
     <tr>
       <th>Language</th>
+      <th>Extension</th>
       <th>Gem name</th>
       <th>Maintainer</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Jade</td>
+      <td>[Jade](http://github.com/visionmedia/jade)</td>
+      <td>.jade</td>
       <td>Native</td>
       <td><a href="http://github.com/thegreatape">Thomas Mayfield</a></td>
     </tr>
     <tr>
-      <td>JSHaml</td>
+      <td>[JSHaml](http://github.com/sdrdis/haml_to_js)</td>
+      <td>.jshaml</td>
       <td><a href="http://github.com/sdrdis/guard-templates-jshaml">guard-templates-jshaml</a></td>
       <td><a href="http://github.com/sdrdis">Sébastien Drouyer</a></td>
     </tr>
@@ -172,7 +175,7 @@ Here are some available extensions :
 
 Never the less, an up-to-date list of guard-templates extensions can be found on [rubygems](https://rubygems.org/search?query=guard-templates-).
 
-All other template types fall back to being inlined as string literals.
+If All other template types fall back to being inlined as string literals.
 
 ### Adding Precompilation Support For Other Languages
 Adding precompilation support for your favorite language is simple. There are currently two ways :
