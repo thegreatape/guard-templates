@@ -157,14 +157,11 @@ Here are some available languages :
     </tr>
   </thead>
   <tbody>
-    <!-- Jade -->
     <tr>
       <td>Jade</td>
       <td>Native</td>
       <td><a href="http://github.com/thegreatape">Thomas Mayfield</a></td>
     </tr>
-    
-    <!-- JSHaml -->
     <tr>
       <td>JSHaml</td>
       <td><a href="http://github.com/sdrdis/guard-templates-jshaml">guard-templates-jshaml</a></td>
