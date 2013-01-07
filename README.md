@@ -186,7 +186,7 @@ Adding precompilation support for your favorite language is simple. There are cu
       * The function takes 2 parameters
           * ```str```, which is the content of the input file
           * ```target```, which is a hash containing information about the target
-            * ```name```, path (without extension) of the input js file
-            * ```type```, file's extension
-            * ```path```, path of the output js file
+              * ```name```, path (without extension) of the input js file
+              * ```type```, file's extension
+              * ```path```, path of the output js file
       * The function must return a stringified Javascript function.
