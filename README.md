@@ -159,13 +159,13 @@ Here are some available extensions :
   </thead>
   <tbody>
     <tr>
-      <td>[Jade](http://github.com/visionmedia/jade)</td>
+      <td><a href="http://github.com/visionmedia/jade">Jade</a></td>
       <td>.jade</td>
       <td>Native</td>
       <td><a href="http://github.com/thegreatape">Thomas Mayfield</a></td>
     </tr>
     <tr>
-      <td>[JSHaml](http://github.com/sdrdis/haml_to_js)</td>
+      <td><a href="http://github.com/sdrdis/haml_to_js">JSHaml</a></td>
       <td>.jshaml</td>
       <td><a href="http://github.com/sdrdis/guard-templates-jshaml">guard-templates-jshaml</a></td>
       <td><a href="http://github.com/sdrdis">Sébastien Drouyer</a></td>
