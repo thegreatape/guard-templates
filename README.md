@@ -144,9 +144,9 @@ MyApp['index'] = function anonymous(locals, attrs, escape, rethrow) {
 ```
 
 ## Precompilation 
-Currently, [Jade](https://github.com/visionmedia/jade) is the only language natively supported. If you want to use an other language, you have to install extensions.
+Currently, [Jade](https://github.com/visionmedia/jade) is the only language natively supported. If you want to use an other language, you have to install plugins.
 
-Here are some available extensions :
+Here are some available plugins :
 
 <table>
   <thead>
@@ -173,12 +173,13 @@ Here are some available extensions :
   </tbody>
 </table>
 
-Never the less, an up-to-date list of guard-templates extensions can be found on [rubygems](https://rubygems.org/search?query=guard-templates-).
+Never the less, an up-to-date list of guard-templates plugins can be found on [rubygems](https://rubygems.org/search?query=guard-templates-).
 
-If All other template types fall back to being inlined as string literals.
+If there is no installed plugin supporting your template type, it falls back to being inlined as string literals.
 
 ### Adding Precompilation Support For Other Languages
 Adding precompilation support for your favorite language is simple. There are currently two ways :
 * you can add a single class method to Guard::Templates::Compilers. When checking for precompilation support for a particular file extension, guard-templates looks for a class method named ```compile_<extension>``` in that module. It should accept a string (representing the template source) and return a stringified Javascript function. See ```compile_jade``` in Guard::Templates::Compilers for an example.
-* or you can create an external gem and share your implementation with others. There is only very few conditions for 
+* or you can create an external gem and share your implementation with others. There is only very few requirements :
+** It is recommended you name your gem ```guard-templates-EXTENSION``` in order to let users find it on [rubygems](https://rubygems.org/search?query=guard-templates-).
 ** 
