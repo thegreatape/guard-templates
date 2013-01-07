@@ -58,7 +58,7 @@ module Guard
               dir = Pathname.new(target[:path]).dirname.to_s
               FileUtils.mkdir_p(dir) if !File.exist?(dir)
               File.open(target[:path], 'w') do |f|
-                f.write("#{@options[:namespace]}['#{target[:name]}'] = #{compile(contents, target[:type])}") 
+                f.write("#{@options[:namespace]}['#{target[:name]}'] = #{compile(contents, target)}") 
               end
             end
           end
@@ -66,7 +66,7 @@ module Guard
       end
       if @single_file_mode
         File.open(@options[:output], 'w') do |f|
-          js = templates.map{|target,content| "#{target[:name].dump}: #{compile(content, target[:type])}" }.join(",\n")
+          js = templates.map{|target,content| "#{target[:name].dump}: #{compile(content, target)}" }.join(",\n")
           f.write "#{@options[:namespace]}.templates = {#{js}}"
         end
       end
@@ -103,11 +103,17 @@ module Guard
       end
     end
 
-    def compile(str, type)
+    def compile(str, target)
+      type = target[:type]
       if Compilers.methods.include?("compile_#{type}")
         Compilers.send("compile_#{type}", str)
       else
-        str.dump
+        begin
+          require "guard/templates/#{type}/compiler"
+          return Templates.const_get(type.capitalize)::Compiler.compile(str, target)
+        rescue LoadError
+          return str.dump
+        end
       end
     end
     
