@@ -168,7 +168,7 @@ Here are some available languages :
       <td><a href="http://github.com/sdrdis">Sébastien Drouyer</a></td>
     </tr>
   </tbody>
-</table
+</table>
 
 Never the less, an up-to-date list of guard-templates extensions can be found on [rubygems](https://rubygems.org/search?query=guard-templates-).
 
