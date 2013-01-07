@@ -146,7 +146,7 @@ MyApp['index'] = function anonymous(locals, attrs, escape, rethrow) {
 ## Precompilation 
 Currently, [Jade](https://github.com/visionmedia/jade) is the only language natively supported. If you want to use an other language, you have to install extensions.
 
-Here are some available languages :
+Here are some available extensions :
 
 <table>
   <thead>
