@@ -181,5 +181,5 @@ If there is no installed plugin supporting your template type, it falls back to 
 Adding precompilation support for your favorite language is simple. There are currently two ways :
 * you can add a single class method to Guard::Templates::Compilers. When checking for precompilation support for a particular file extension, guard-templates looks for a class method named ```compile_<extension>``` in that module. It should accept a string (representing the template source) and return a stringified Javascript function. See ```compile_jade``` in Guard::Templates::Compilers for an example.
 * or you can create an external gem and share your implementation with others. There is only very few requirements :
-** It is recommended you name your gem ```guard-templates-EXTENSION``` in order to let users find it on [rubygems](https://rubygems.org/search?query=guard-templates-).
-** 
+  * It is recommended you name your gem ```guard-templates-EXTENSION``` in order to let users find it on [rubygems](https://rubygems.org/search?query=guard-templates-).
+  * You have
