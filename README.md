@@ -184,7 +184,7 @@ Adding precompilation support for your favorite language is simple. There are cu
   * It is recommended you name your gem ```guard-templates-<extension>``` in order to let users find it on [rubygems](https://rubygems.org/search?query=guard-templates-).
   * You have to create ```lib/guard/templates/<extension>/compiler.rb``` in which you create a ```Guard::Templates::<extension>::Compiler``` class implementing the ```compile``` static function.
       * The function takes 2 parameters
-          * ```str```, which is the content of the input file
+          * ```str```, which is the content of the template source
           * ```target```, which is a hash containing information about the target
               * ```name```, path (without extension) of the input js file
               * ```type```, file's extension
