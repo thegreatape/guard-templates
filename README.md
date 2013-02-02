@@ -144,9 +144,49 @@ MyApp['index'] = function anonymous(locals, attrs, escape, rethrow) {
 ```
 
 ## Precompilation 
-Currently, only [Jade](https://github.com/visionmedia/jade) is supported. All other template types fall back to being inlined as string literals.
+Currently, [Jade](https://github.com/visionmedia/jade) is the only language natively supported. If you want to use an other language, you have to install plugins.
+
+Here are some available plugins :
+
+<table>
+  <thead>
+    <tr>
+      <th>Language</th>
+      <th>Extension</th>
+      <th>Gem name</th>
+      <th>Maintainer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="http://github.com/visionmedia/jade">Jade</a></td>
+      <td>.jade</td>
+      <td>Native</td>
+      <td><a href="http://github.com/thegreatape">Thomas Mayfield</a></td>
+    </tr>
+    <tr>
+      <td><a href="http://github.com/sdrdis/haml_to_js">JSHaml</a></td>
+      <td>.jshaml</td>
+      <td><a href="http://github.com/sdrdis/guard-templates-jshaml">guard-templates-jshaml</a></td>
+      <td><a href="http://github.com/sdrdis">Sébastien Drouyer</a></td>
+    </tr>
+  </tbody>
+</table>
+
+Never the less, an up-to-date list of guard-templates plugins can be found on [rubygems](https://rubygems.org/search?query=guard-templates-).
+
+If there is no installed plugin supporting your template type, it falls back to being inlined as string literals.
 
 ### Adding Precompilation Support For Other Languages
-Adding precompilation support for your favorite language is as simple as adding a single class method to Guard::Templates::Compilers. When checking for precompilation support for a particular file extension, guard-templates looks for a class method named ```compile_<extension>``` in that module. It should accept a string (representing the template source) and return a stringified Javascript function. See ```compile_jade``` in Guard::Templates::Compilers for an example.
-
-
+Adding precompilation support for your favorite language is simple. There are currently two ways :
+* you can add a single class method to Guard::Templates::Compilers. When checking for precompilation support for a particular file extension, guard-templates looks for a class method named ```compile_<extension>``` in that module. It should accept a string (representing the template source) and return a stringified Javascript function. See ```compile_jade``` in Guard::Templates::Compilers for an example.
+* or you can create an external gem and share your implementation with others. There is only 2 requirements :
+  * It is recommended you name your gem ```guard-templates-<extension>``` in order to let users find it on [rubygems](https://rubygems.org/search?query=guard-templates-).
+  * You have to create ```lib/guard/templates/<extension>/compiler.rb``` in which you create a ```Guard::Templates::<extension>::Compiler``` class implementing the ```compile``` static function.
+      * The function takes 2 parameters
+          * ```str```, which is the content of the template source
+          * ```target```, which is a hash containing information about the target
+              * ```name```, path (without extension) of the input template file
+              * ```type```, file's extension
+              * ```path```, path of the output js file
+      * The function must return a stringified Javascript function.
