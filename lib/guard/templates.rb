@@ -47,6 +47,9 @@ module Guard
     # @param [Array<String>] paths the changes files or paths
     # @raise [:task_has_failed] when run_on_change has failed
     def run_on_change(paths)
+      if @single_file_mode
+        paths = Watcher.match_files(self, Dir.glob('**/*'))
+      end
       templates = {}
       paths.each do |path|
         @watchers.each do |watcher|
